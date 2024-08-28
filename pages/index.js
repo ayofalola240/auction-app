@@ -1,29 +1,16 @@
-import axios from "axios";
+
+import buildClient from "../api/build-client";
 import HomePage from "../components/homePage";
 
 const LandingPage = ({ currentUser }) => {
   console.log("We are on the browser");
   return <HomePage currentUser={currentUser} />;
 };
-
-LandingPage.getInitialProps = async ({ req }) => {
+LandingPage.getInitialProps = async (ctx) => {
   try {
-    const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
-    let data;
+    const client = buildClient(ctx);
 
-    if (typeof window === "undefined") {
-      // We are on the server
-      console.log("Server-side request");
-      const response = await axios.get(`${baseURL}/users/user-details`, {
-        headers: req.headers,
-      });
-      data = response.data;
-    } else {
-      // We are on the browser
-      console.log("Client-side request");
-      const response = await axios.get(`${baseURL}/users/user-details`);
-      data = response.data;
-    }
+    const { data } = await client.get("/users/user-details");
     return { currentUser: data.user || null };
   } catch (error) {
     console.log("Error fetching current user:", error.response ? error.response.data : error.message);
