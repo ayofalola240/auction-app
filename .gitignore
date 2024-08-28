@@ -1,0 +1,14 @@
+node_modules/
+.next/
+# Environment variables
+.env
+
+# Production build
+/build/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+
